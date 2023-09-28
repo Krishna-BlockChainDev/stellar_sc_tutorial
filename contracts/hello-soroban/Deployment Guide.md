@@ -4,12 +4,14 @@ Path  is :  cd soroban-tutorial
 
 1. To run test
 ```bash
-cargo test
+cargo test # without logs
+cargo test -- --nocapture # with logs
 ```
 
 2. After make changes on smart contract please build first. build will create a target folder wihch contains a .wasm file, which is required for interaction with network.
 ```bash
-soroban contract build
+soroban contract build # without logs
+soroban contract build --profile release-with-logs # with logs
 ```
 3. Once Its build successfully, A .wasm file will created successfully you can verify by following command.
 ```bash

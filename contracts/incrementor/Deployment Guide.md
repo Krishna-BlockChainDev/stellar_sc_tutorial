@@ -1,9 +1,14 @@
 ## Steps for contract build and Invoke Functions
 
 1. After make changes on smart contract please build first. build will create a target folder wihch contains a .wasm file, which is required for interaction with network.
+
 ```bash
-cargo test
-soroban contract build
+cargo test # without logs
+cargo test -- --nocapture # with logs
+```
+```bash
+soroban contract build #without logs
+soroban contract build --profile release-with-logs #with logs
 ```
 2. Once Its build successfully, A .wasm file will created successfully you can verify by following command.
 ```bash
