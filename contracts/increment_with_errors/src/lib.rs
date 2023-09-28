@@ -19,7 +19,7 @@ impl IncrementContract {
     /// Increment an internal counter; return the new value.
     pub fn increment(env: Env) -> Result<u32, Error>  {
         let mut count: u32 = env.storage().instance().get(&COUNTER).unwrap_or(0);
-        log!(&env, "count: {}", count);
+        log!(&env, "count should not be greator than 5: {}", count);
         count = count + 1;
 
       

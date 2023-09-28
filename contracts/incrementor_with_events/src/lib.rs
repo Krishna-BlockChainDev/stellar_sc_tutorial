@@ -13,7 +13,7 @@ impl IncrementContract {
         let mut count: u32 = env.storage().instance().get(&COUNTER).unwrap_or(0);
         count = count + 1;
 
-        log!(&env, "count: {}", count);
+        log!(&env, "testing event count: {}", count);
         env.storage().instance().set(&COUNTER, &count);
         // Publish an event about the increment occuring.
         // The event has two topics:

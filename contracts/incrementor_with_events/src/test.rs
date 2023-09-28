@@ -1,7 +1,9 @@
 #![cfg(test)]
 
+
+extern crate std;
 use super::*;
-use soroban_sdk::{testutils::Events, vec, Env, IntoVal};
+use soroban_sdk::{testutils::{Events,Logs}, vec, Env, IntoVal};
 
 #[test]
 fn test() {
@@ -12,11 +14,12 @@ fn test() {
     assert_eq!(client.increment(), 1);
     assert_eq!(client.increment(), 2);
     assert_eq!(client.increment(), 3);
-
+    std::println!("{}", env.logs().all().join("\n"));
     assert_eq!(client.decrement(), 2);
     assert_eq!(client.decrement(), 1);
+    std::println!("{}", env.logs().all().join("\n"));
     assert_eq!(client.reset(), 0);
-
+    std::println!("{}", env.logs().all().join("\n"));
     assert_eq!(
         env.events().all(),
         vec![
