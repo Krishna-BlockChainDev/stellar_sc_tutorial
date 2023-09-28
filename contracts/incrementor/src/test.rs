@@ -10,4 +10,9 @@ fn increment() {
     assert_eq!(client.increment(), 1);
     assert_eq!(client.increment(), 2);
     assert_eq!(client.increment(), 3);
+
+    assert_eq!(client.decrement(), 2);
+    assert_eq!(client.decrement(), 1);
+    
+    assert_eq!(client.reset(), 0);
 }
