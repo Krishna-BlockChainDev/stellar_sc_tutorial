@@ -1,9 +1,6 @@
 ## Steps for contract build and Invoke Functions
 
 
-**************Testnet is not giving Proper Error Message as Local soroban cli is giving*******
-
-
 Path  is :  cd soroban-tutorial
 
 1. To run test
@@ -15,19 +12,33 @@ cargo test -- --nocapture # with logs
 2. After make changes on smart contract please build first. build will create a target folder wihch contains a .wasm file, which is required for interaction with network.
 ```bash
 soroban contract build #without logs
-soroban contract build --profile release-with-logs #with logs
+soroban contract build --profile release-with-logs #with logs commands not working
 ```
 3. Once Its build successfully, A .wasm file will created successfully you can verify by following command.
 ```bash
 ls target/wasm32-unknown-unknown/release/*.wasm
 ```
-4. Inkvoke Function for increment_with_errors contract
+4. Inkvoke Function for increment_with_user_auth contract.
+
 ```bash
-soroban contract invoke \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
-  --id 2 \
-  -- \
-  increment
+    soroban contract invoke \
+    --source acc1 \
+    --wasm target/wasm32-unknown-unknown/release/increment_with_user_auth.wasm \
+    --id 1 \
+    -- \
+    increment \
+    --user GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY \
+    --value 2
+```
+```bash
+    soroban contract invoke \
+    --source acc2 \
+    --wasm target/wasm32-unknown-unknown/release/increment_with_user_auth.wasm \
+    --id 1 \
+    -- \
+    increment \
+    --user GANC6CGSVZTJLADFOQFV6VO5XMVHJ6SD5RTJ6MNSHY5W4AN3RYEGPCNO \
+    --value 5
 ```
 
 Steps fo Contract Deployemnt on Testnet
@@ -38,78 +49,59 @@ soroban config network add --global testnet \
   --rpc-url https://soroban-testnet.stellar.org:443 \
   --network-passphrase "Test SDF Network ; September 2015"
 ```
-2. create a account for contract development 
+2. create two user account for contract development 
 ```bash
-soroban config identity generate --global alice
-soroban config identity address alice //return public address of alice
+soroban config identity generate acc1 && \
+soroban config identity generate acc2 && \
+soroban config identity address acc1 && \
+soroban config identity address acc2
 ```
 3. Fund above test account with some test lumens
  curl "https://friendbot.stellar.org/?addr=$(soroban config identity address alice)"
  or go to stellar laboratry  and fund the account.
 
-4. Deploy increment_with_errors contract
+
+4. Deploy increment_with_user_auth contract
 ```bash
 soroban contract deploy \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
+  --wasm target/wasm32-unknown-unknown/release/increment_with_user_auth.wasm \
   --source alice \
   --network testnet
-  ```## Steps for contract build and Invoke Functions
-
-1. After make changes on smart contract please build first. build will create a target folder wihch contains a .wasm file, which is required for interaction with network.
+  ```
+5. Interact With contract first save the deployed address in a file 
 ```bash
-soroban contract build
-```
-2. Once Its build successfully, A .wasm file will created successfully you can verify by following command.
-```bash
-ls target/wasm32-unknown-unknown/release/*.wasm
+echo "CDKJPWCS7JLDRJOL26LJJMXA6YLNRBE6S6K5CZZMAF3TZMZ5KKNBKPLY" > .soroban/increment_with_user_auth-id
 ```
 
-3. Inkvoke Function for increament contract on soroban-cli
+6. For invoking with acc1 and acc2
 ```bash
-soroban contract invoke \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
-  --id 2 \
+  soroban contract invoke \
+  --id $(cat .soroban/increment_with_user_auth-id) \
+  --source acc1 \
+  --network testnet \
   -- \
-  increment
-```
-***note : decrement is not working in soroban CLI but it working on testnet.
-```bash
-soroban contract invoke \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
-  --id 3 \
-  -- \
-  decrement
-```
+  increment \
+  --user GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY \
+  --value 2
 
-4. Contract deployment and interaction command step for incrementor on <b>testnet</b>(Other way fist install then deploy)
-```bash 
-soroban contract install \
-  --network testnet \
-  --source alice \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm
-```
-```bash
-soroban contract deploy \
-  --wasm-hash e8cd66c5b552d166c4b720e9d4f3688ca76aaf90882b56d6e529c27304d0c073 \
-  --source alice \
-  --network testnet \
-  > .soroban/increment_with_errors-id
-```
-7. For invoking 
-```bash
-soroban contract invoke \
-  --id $(cat .soroban/increment_with_errors-id) \
-  --source alice \
-  --network testnet \
-  -- \
-  increment
 
   soroban contract invoke \
-  --id $(cat .soroban/increment_with_errors-id) \
-  --source alice \
+  --id $(cat .soroban/increment_with_user_auth-id) \
+  --source acc2 \
   --network testnet \
   -- \
-  decrement
+  increment \
+   --user GANC6CGSVZTJLADFOQFV6VO5XMVHJ6SD5RTJ6MNSHY5W4AN3RYEGPCNO \
+  --value 2
+
+  soroban contract invoke \
+  --id $(cat .soroban/increment_with_user_auth-id) \
+  --source acc2 \
+  --network testnet \
+  -- \
+  decrement \
+   --user GANC6CGSVZTJLADFOQFV6VO5XMVHJ6SD5RTJ6MNSHY5W4AN3RYEGPCNO \
+  --value 2
 ```
 
 To run test

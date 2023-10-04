@@ -1,9 +1,6 @@
 ## Steps for contract build and Invoke Functions
 
 
-**************Testnet is not giving Proper Error Message as Local soroban cli is giving*******
-
-
 Path  is :  cd soroban-tutorial
 
 1. To run test
@@ -41,45 +38,12 @@ soroban config network add --global testnet \
 2. create a account for contract development 
 ```bash
 soroban config identity generate --global alice
-soroban config identity address alice //return public address of alice
+soroban config identity address alice #return public address of alice
 ```
 3. Fund above test account with some test lumens
  curl "https://friendbot.stellar.org/?addr=$(soroban config identity address alice)"
  or go to stellar laboratry  and fund the account.
 
-4. Deploy increment_with_errors contract
-```bash
-soroban contract deploy \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
-  --source alice \
-  --network testnet
-  ```## Steps for contract build and Invoke Functions
-
-1. After make changes on smart contract please build first. build will create a target folder wihch contains a .wasm file, which is required for interaction with network.
-```bash
-soroban contract build
-```
-2. Once Its build successfully, A .wasm file will created successfully you can verify by following command.
-```bash
-ls target/wasm32-unknown-unknown/release/*.wasm
-```
-
-3. Inkvoke Function for increament contract on soroban-cli
-```bash
-soroban contract invoke \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
-  --id 2 \
-  -- \
-  increment
-```
-***note : decrement is not working in soroban CLI but it working on testnet.
-```bash
-soroban contract invoke \
-  --wasm target/wasm32-unknown-unknown/release/increment_with_errors.wasm \
-  --id 3 \
-  -- \
-  decrement
-```
 
 4. Contract deployment and interaction command step for incrementor on <b>testnet</b>(Other way fist install then deploy)
 ```bash 

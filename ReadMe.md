@@ -8,10 +8,10 @@ Once Its build successfully, A .wasm file will created successfully you can veri
 ```bash
 ls target/wasm32-unknown-unknown/release/*.wasm
 ```
-Inkvoke Function for hello-soroban contract
+Inkvoke Function for token contract
 ```bash
 soroban contract invoke \
-    --wasm target/wasm32-unknown-unknown/release/hello_soroban.wasm \
+    --wasm target/wasm32-unknown-unknown/release/token_contract.wasm \
     --id 1 \
     -- \
     hello \
