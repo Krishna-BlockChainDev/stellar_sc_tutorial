@@ -34,6 +34,8 @@ soroban config identity generate --global acc1
 soroban config identity address acc1 #return public address of acc1
 soroban config identity generate --global acc2
 soroban config identity address acc2 #return public address of acc2
+soroban config identity generate --global acc3
+soroban config identity address acc3 #return public address of acc3
 ```
 
 4. Contract deployment and interaction command step for token-contract on <b>testnet</b>(Other way fist install then deploy)
@@ -50,18 +52,10 @@ soroban contract deploy \
   --network testnet \
   > .soroban/token-contract-id
 ```
-7. For invoking 
+
+
+***to Check Particular account balance***
 ```bash
-soroban contract invoke \
-  --id $(cat .soroban/token-contract-id) \
-  --source alice \
-  --network testnet \
-  -- \
-  increment \
-  --incr 5
-
-***to Check Particular account balance.
-
 soroban contract invoke \
     --id $(cat .soroban/token-contract-id) \
   --source alice \
@@ -69,9 +63,10 @@ soroban contract invoke \
     -- \
     balance \
     --id GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY
+```
 
-***to initialize the token contract.
-
+***to initialize the token contract***
+```bash
 soroban contract invoke \
     --id $(cat .soroban/token-contract-id) \
     --source alice \
@@ -82,8 +77,8 @@ soroban contract invoke \
     --decimal 7 \
     --name "KRISHNA" \
     --symbol "KBR"
-
-**** to Mint to the token for Particular account -- for acc1
+```
+***To Mint to the token for Particular account for acc1***
 ```bash    
 soroban contract invoke \
     --id $(cat .soroban/token-contract-id) \
@@ -94,8 +89,19 @@ soroban contract invoke \
     --to GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY \
     --amount 1000000000 \
 ```
+ ***to burn to the token for Particular account for acc1***
+```bash    
+soroban contract invoke \
+    --id $(cat .soroban/token-contract-id) \
+    --source acc1 \
+    --network testnet \
+    -- \
+    burn \
+    --from GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY \
+    --amount 1000000 
+```
 
-*** to approve account for trnasfer token from one account to another account
+*** to approve account for trnasfer token from one account to another account***
 
 ```bash
 soroban contract invoke \
@@ -110,7 +116,7 @@ soroban contract invoke \
     --expiration_ledger 1849557
 ```
 
-*** to tranfer fund between one account to another account
+*** to tranfer fund between one account to another account***
 ```bash
 soroban contract invoke \
     --id $(cat .soroban/token-contract-id) \
@@ -121,6 +127,20 @@ soroban contract invoke \
     --from GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY \
     --to GANC6CGSVZTJLADFOQFV6VO5XMVHJ6SD5RTJ6MNSHY5W4AN3RYEGPCNO \
     --amount 10000 
+
+```
+*** to transfer_from fund between one account to another account ****need  to check again
+```bash
+soroban contract invoke \
+    --id $(cat .soroban/token-contract-id) \
+    --source acc1 \
+    --network testnet \
+    -- \
+    transfer_from \
+    --spender GA4ECCJTJG53WNJQS5RBXI3TSLNRBPDGWAVNGINKEKYZ73LRSYICXFHY \
+    --from GANC6CGSVZTJLADFOQFV6VO5XMVHJ6SD5RTJ6MNSHY5W4AN3RYEGPCNO \
+    --to  GD6RDVCWQEAG3PCAPYUB2OCZLCD2O47GFC33MWAYRHIDQTPVZPANUK6A \
+    --amount 100 
 
 ```
 
